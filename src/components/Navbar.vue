@@ -1,15 +1,18 @@
 <template>
-    <nav>
+    <nav :class="{ light_color: color }">
         <div class="logo-container" :class="{ active_menu: menubarIsActive }">
-            <a href="/" class="nav-logo">
+            <router-link :to="{ name: 'home' }" class="nav-logo">
                 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24" height="24"
                     viewBox="0 0 24 24">
                     <path
                         d="M7.335 1.023l2.462.434a1 1 0 0 1 .811 1.159L8.004 17.388a2 2 0 0 1-2.317 1.622l-3.94-.694a1 1 0 0 1-.81-1.159L3.28 3.862a3.5 3.5 0 0 1 4.054-2.839zm7.039 3.272l7.878 1.39a1 1 0 0 1 .812 1.158l-1.997 11.325a5.5 5.5 0 0 1-6.372 4.461l-4.431-.78a1 1 0 0 1-.812-1.16l2.605-14.771a2 2 0 0 1 2.317-1.623z"
                         fill="currentColor"></path>
                 </svg> <span>Opalin</span>
-            </a>
-            <div class="menu-toggler" @click="toggleMenubar">#</div>
+            </router-link>
+            <div class="menu-toggler" @click="toggleMenubar">
+                <svg-icon type="mdi" :path="hamburgerPath" v-if="!menubarIsActive"></svg-icon>
+                <svg-icon type="mdi" :path="closePath" v-else></svg-icon>
+            </div>
         </div>
         <div class="menu-container" :class="{ active_menu: menubarIsActive }">
             <ul class="main-menu">
@@ -19,7 +22,7 @@
                 <li><router-link :to="{ name: 'about' }" class="menu-item" @click="toggleMenubar">About</router-link></li>
             </ul>
             <ul class="sub-menu">
-                <li><button  @click="$emit('open-login')">log in</button></li>
+                <li><button @click="$emit('open-login')">log in</button></li>
                 <li><button class="menu-btn" @click="$emit('open-signup')">sign up</button></li>
             </ul>
         </div>
@@ -27,11 +30,19 @@
 </template>
 
 <script>
+import SvgIcon from '@jamescoyle/vue-icon';
+import { mdiMenu, mdiClose } from '@mdi/js';
+
+
 export default {
+    components: { SvgIcon },
     emits: ['open-login', 'open-signup'],
+    props: ['color'],
     data() {
         return {
-            menubarIsActive: false
+            menubarIsActive: false,
+            hamburgerPath: mdiMenu,
+            closePath: mdiClose
         }
     },
 
@@ -58,11 +69,20 @@ nav {
     z-index: 100;
 }
 
-.nav-logo {
+nav .nav-logo {
     font-family: 'PT Serif', serif;
     text-decoration: none;
     font-size: 1.5rem;
     color: #110F24;
+}
+
+nav.light_color .logo-container,
+nav.light_color .nav-logo {
+    color: #fff;
+}
+
+nav.light_color .logo-container {
+    color: #fff;
 }
 
 .nav-logo span {
@@ -89,6 +109,7 @@ nav {
     position: fixed;
     width: 100%;
 }
+
 
 .logo-container.active_menu,
 .logo-container.active_menu .nav-logo {
@@ -141,7 +162,8 @@ nav ul li button:hover {
 }
 
 .logo-container.active_menu .nav-logo:hover,
-.menu-container.active_menu a:hover {
+.menu-container.active_menu a:hover,
+.menu-container.active_menu button:hover {
     color: #fff;
 }
 
@@ -213,16 +235,32 @@ nav ul li button:hover {
         color: #110F24;
     }
 
+    nav.light_color .logo-container,
+    nav.light_color .nav-logo {
+        color: #fff !important;
+    }
+
+    nav.light_color ul li a {
+        color: #fff;
+    }
+
+    nav.light_color ul li button {
+        color: #fff;
+    }
+
     nav ul li button.menu-btn {
         padding: 10px 15px;
     }
 
-    nav a:hover {
-        color: #575BDE;
+    nav a:hover,
+    nav button:hover {
+        color: #575BDE !important;
     }
 
-    nav ul li button:hover {
-        color: #575BDE;
+    nav.light_color a:hover,
+    nav.light_color ul li button:hover {
+        color: #fff !important;
+        opacity: 0.9;
     }
 }
 
@@ -230,4 +268,5 @@ nav ul li button:hover {
     .menu-container {
         padding-left: 180px;
     }
-}</style>
+}
+</style>

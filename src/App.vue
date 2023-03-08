@@ -1,6 +1,6 @@
 <script setup>
-import { RouterLink, RouterView } from 'vue-router'
-import { reactive } from 'vue'
+import { RouterView } from 'vue-router'
+import { reactive} from 'vue'
 import Navbar from './components/Navbar.vue';
 import Login from './views/Login.vue';
 import Signup from './views/Signup.vue';
@@ -16,12 +16,13 @@ function toggleSignupModal() {
   state.signupIsActive = !state.signupIsActive
   body.classList.toggle('modal_active')
 }
+
 </script>
 
 <template>
   <header>
 
-    <Navbar @open-login="toggleLoginModal" @open-signup="toggleSignupModal"></Navbar>
+    <Navbar @open-login="toggleLoginModal" @open-signup="toggleSignupModal" :color="$route.meta.color"></Navbar>
   </header>
 
   <Login :isActive="state.loginIsActive" @close-modal="toggleLoginModal"></Login>
